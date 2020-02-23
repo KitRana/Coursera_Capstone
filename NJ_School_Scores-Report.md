@@ -1,0 +1,144 @@
+
+<br>
+
+<h1 style="text-align: center;">A Deep Dive into New Jersey School Scores</h1>
+
+<p style="text-align: center; font-size: 150%;">Kit Rana</p>
+
+<p style="text-align: center; font-size: 150%;">February 21, 2020</p>
+
+<br>
+
+## 1. Abstract
+
+<!-- Discuss business problem and who would be interested in the project -->
+### 1a. Introduction  
+New Jersey is a US state with a population of roughly 9 million as of 2018 [1](#Footnotes).  Nearly 22% of that population is under the age of 18 [1](#Footnotes).  That being said, the quality of schools is extremely important in educating our future workforce and preparing them for what comes after high school.  
+
+### 1b. Problem  
+When researching schools and places to raise a family, there are various online resources that will provide school scores and one can assume the factors that go into establishing these scores (ie. taxes, crime, etc.). However, it is not always clear what other factors might lead to these numbers, for example what sort of venues are in the vicinity of these schools, and do they have an impact on a school's score.  
+
+### 1c. Goal  
+The goal of this analysis is to shine a light on the state of New Jersey, and attempt to find any patterns at the county and district level that might exist to explain what factors could impact whether a school is high rated versus low rated.  An analysis of this type could help home buyers in choosing the right home to raise their kids in.  
+
+## 2. Data
+
+<!-- Describe the data and the source -->
+### 2a. School Scores  
+I will be using a series of APIs and CSV files for this analysis.  The NJ Schools Scores from 2017-2018 will come from the NJ Department of Education [[2]](#Footnotes).  This dataset is well organized with various features including, county, district, score, percentile, amoung many others.  
+
+### 2b. Coordinates  
+We will need to make API calls to extract information for coordinates.  The ArcGIS [[3]](#Footnotes) source will be used to request county and district coordinates using the geocoder Python library.  
+
+### 2c. Venues  
+We will need to make API calls to extract information for venues.  The Foursquare [[4]](#Footnotes) source will be used to request venues based on coordinates and radius.
+
+### 2d. Data Cleansing/Transforming   
+After the data is extracted, we will perform transform operations to do the following:
+   1. Choose the columns we want to work with
+   2. Change names of columns as needed
+   3. Drop columns as needed
+   3. Set indexes
+   
+Once the calls are made to the API sources we will convert them to Pandas dataframes and save them to CSV files. 
+
+
+## 3. Methodology
+
+<!-- Represents the main component of the report where you discuss and describe any exploratory data analysis that you did, any inferential statistical testing that you performed, if any, and what machine learnings were used and why. -->
+
+### 3a. Exploratory Data Analysis    
+After the data was extract and processed, intial data analysis was conducted to get a better understanding of what the data looks like. I plan to group the individual school scores by district and use the mean as the average score for the district. There will be a similar analysis done to analyze counties to provide school density for each county.  There 491 unique districts, 21 counties, 373 unique venue categories.  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/3a_district_df.png" alt="dataframe" width="400"/>
+
+We also want to retrieve the 5 most common venues for for each district using the `return_most_common_venues` function.  With these venues in hand we can run statistical analysis and machine learning to cluster the venues.  
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/3a_most_common.png" alt="most common venues" width="800"/> 
+
+### 3b. Statistical Testing    
+We will be clustering the districts by venue category using the kmeans algorithm.  In order to do this we will first start with encoding the ***Venue Category*** column with **one hot** `get_dummies` function. This encoding will provide a binary classification to each venue category column assigning a 1 if the venue category exists for a specific district and a 0 if it does not.  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/3b_onehot.png" alt="one hot encoding" width="800"/>
+
+
+
+### 3c. Machine Learning  
+We will be using the `KMeans` function from the **sci-kit learn** Python library to cluster our venue categories. After encoding the venue catergories, we need to cluster the venue categories based on `k` clusters.  To determine the best k value to use, we can apply the elbow method using the `cdist` function from the **scipy** library.  
+
+<!-- ![elbow method matplotlib chart](https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/elbow_method.png "Elbow Method Chart") -->
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/elbow_method.png" alt="drawing" width="600"/>
+
+Using the elbow method resulted in an optimal k value of 6.  The KMeans function was used to cluster the venue categories into 6 clusters.  With the labels in hand, we can apply them to their corresponding rows in the dataframe.  I noticed that not all the districts we are analyzing came back with venues within the radius given.  In order to account for these schools we will give them a cluster label of 9 to treat these schools as outliers.
+
+### 3d. More Exploratory Analysis  
+Along with cluster labels, I wanted to split school scores into 3 categories, High, Medium, and Low.  High being scores 70 and above, Medium for scores 40-69, and Low for all others.  I also gave these categories numerical values in order to use them for visuals on a map.  
+
+We can take a look at the distribution of the scores in bins of 10 values with a histogram.  The scores seem to be pretty evenly distributed from low scores to high scores.  Also, it was interesting to note that the majority of the school districts fall into the Medium category with 330.  The High and Low categories were very close in terms of distribution with 131 and 139 districts respectively.  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/avg_score_hist.png" alt="histogram" width="600"/>
+
+With the district scores categorized, I wanted to analyze each category to see if I could uncover any patterns about the types of venues that are most common to each.  
+
+## 4. Results
+
+<!-- Discuss the results -->
+
+### 4a. Top 20 Most Frequent Venues
+The results of the analysis were interesting.  When looking into the top 20 most frequent venues in the three different score categories, it was clear to see that Pizza Places were the most frequent venues across all three categories.  This could be an issue that could skew results in the analysis.  For the sake of time, I decided to ignore pizza places and start at the second most frequent venue to derive insights.    
+
+* **High**   
+    * The school districts with the highest scores seem to be near parks, liquor stores (assuming wine & spirits),and antique shops.  There are also baseball fields, banks, and coffee shops near by.  This could mean the schools have access recreational sports which could have a significant impact on the students in these schools.  
+* **Medium**   
+    * The school districts with the medium scores seem to be near restaurants and retail space.  This could mean that the students are living in a bit more denser locations.  Denser locations could lead to overcrowded schools and in turn less attention given to individual students.  
+* **Low**   
+    * The school districts with the low scores seem to be near pharmacies, liquor stores, and bars.  A large volume of pharmacies could mean that the schools are located in areas that are a bit more spread out.  It is possible these districts a located in more rural or even lower income areas.  These areas tend to pay less property taxes and therefore have less funds to offer advanced education programs in their schools.
+
+![top 20 venues](https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/top20_venues_hbar.png "top 20 frequent venues")  
+
+### 4b. County Density Map
+I wanted to see if density had any impact on school score so I grouped the data by county and returned the count of schools within each county.  The result was displayed over a Leaflet map using the folium [[5]](#Footnotes) Python library to show the density of schools for each county.  We could see that Bergen and Morris counties were the most dense in terms of schools that belonged to each county.  Also, the results showed that the denser counties were more prevalent in the northern part of the state, closer to New York City.  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4b_density_map1.png" alt="density map" width="600"/>
+
+
+### 4c. Density and Score Map 
+With an initial map created that displays the density of each county, I needed to see whether density had any relationship to the actual school scores for each district.  The results show that the highest scoring districts, Fair Haven, Englewood Cliffs, and Mendham are located in the northern part of the state and belong to the denser counties in the state.  We can also see from the map that the districts with the higher scores are located in the denser counties and also closer to the city.  This could mean higher property taxes, higher incomes, and access to higher education programs.  We can also see from the map that the districts with the lowest scores are primarily in areas that are away from major city centers.  An example of these districts would be Commercial, Downe, and Dennis townships which are all located in Cumberland County the least dense county in the analysis.  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map1.png" alt="density score map1" width="600"/>
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map2.png" alt="density score map2" width="600"/>  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map3.png" alt="density score map3" width="600"/>  
+
+<img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map4.png" alt="density score map4" width="600"/>
+
+
+## 5. Discussion
+
+<!-- Discuss any observations you noted and any recommendations you can make based on the results -->
+### 5a. Observations  
+There were a few observations that I made during the analysis that should be noted.  
+  1. **School scores are district averages** - For the sake of time and data size, the school scores were limited to district averages.  This means that there could have been high scoring schools in majority low score districts that were not captured as top performers.
+  2. **Vocational Schools** - The data includes vocational schools which are a specific type of school that includes adult students as well.  These schools tend to have higher scores.
+  3. **Charter Schools** - Charter schools are publicly funded schools that usually not associated with a school district. They are mainly found in lower income areas and have certain goals to meet to recieve their charter. These schools were removed from the analysis due to their lack of association with any specific school district.
+  4. **Coordinate Data Extraction** - Since we were analyzing each school district average score, the coordinates data was extracted using the district as the location.  This dataset could be improved by using each school as a location to pull venues.
+  
+### 5b. Recommendations  
+There are a few recommendations I would make to improve the analysis.  First, I would expand the dataset performing operations on each individual school.  Second, I would remove vocational schools from the analysis since they might skew the results for a given district.  Third, I would like to extract coordinates from each individual school and perform statistical testing on this dataset.  I believe the results would be slightly different and a bit more accurate.
+
+## 6. Conclusion
+
+<!-- Conclude -->
+In conclusion, keeping the observations and future improvements of the analysis in mind, I believe that for people looking to either buy or rent property in New Jersey with intent to raise a family in a town with good schools should explore cities or towns in the central and northern parts of the state.  A few counties I would recommened are Morris and Bergen they have the highest average school scores and have a large volume of schools in the area for parents to choose.  I would recommend avoiding Cumberland County as it has one of the lowest average scores in the state [Hello].  
+
+## Footnotes
+
+[1] [U.S. Census Bureau - New Jersey](https://www.census.gov/quickfacts/fact/table/NJ/PST045218)  
+[2] [NJ.com](https://www.nj.com/education/2019/03/nj-just-graded-its-public-schools-from-0-100-heres-how-every-school-scored)  
+[3] [ArcGIS](https://www.arcgis.com/index.html)  
+[4] [Foursquare](https://foursquare.com/)  
+[5] [Folium](https://python-visualization.github.io/folium/)  
+
+
+<br>
