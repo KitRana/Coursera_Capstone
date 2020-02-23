@@ -13161,9 +13161,17 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><!-- Discuss business problem and who would be interested in the project --></p>
-<h3 id="1a.-Introduction">1a. Introduction<a class="anchor-link" href="#1a.-Introduction">&#182;</a></h3><p>New Jersey is a US state with a population of roughly 9 million as of 2018 [1].  Nearly 22% of that population is under the age of 18 [1].  That being said, the quality of schools is extremely important in educating our future workforce and preparing them for what comes after high school.</p>
+<h3 id="1a.-Introduction">1a. Introduction<a class="anchor-link" href="#1a.-Introduction">&#182;</a></h3><p>New Jersey is a US state with a population of roughly 9 million as of 2018 <a href="#Footnotes">1</a>.  Nearly 22% of that population is under the age of 18 <a href="#Footnotes">1</a>.  That being said, the quality of schools is extremely important in educating our future workforce and preparing them for what comes after high school.</p>
 <h3 id="1b.-Problem">1b. Problem<a class="anchor-link" href="#1b.-Problem">&#182;</a></h3><p>When researching schools and places to raise a family, there are various online resources that will provide school scores and one can assume the factors that go into establishing these scores (ie. taxes, crime, etc.). However, it is not always clear what other factors might lead to these numbers, for example what sort of venues are in the vicinity of these schools, and do they have an impact on a school's score.</p>
 <h3 id="1c.-Goal">1c. Goal<a class="anchor-link" href="#1c.-Goal">&#182;</a></h3><p>The goal of this analysis is to shine a light on the state of New Jersey, and attempt to find any patterns at the county and district level that might exist to explain what factors could impact whether a school is high rated versus low rated.  An analysis of this type could help home buyers in choosing the right home to raise their kids in.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
 
 </div>
 </div>
@@ -13179,9 +13187,9 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><!-- Describe the data and the source --></p>
-<h3 id="2a.-School-Scores">2a. School Scores<a class="anchor-link" href="#2a.-School-Scores">&#182;</a></h3><p>I will be using a series of APIs and CSV files for this analysis.  The NJ Schools Scores from 2017-2018 will come from the NJ Department of Education [2].  This dataset is well organized with various features including, county, district, score, percentile, amoung many others.</p>
-<h3 id="2b.-Coordinates">2b. Coordinates<a class="anchor-link" href="#2b.-Coordinates">&#182;</a></h3><p>We will need to make API calls to extract information for coordinates.  The ArcGIS [3] source will be used to request county and district coordinates using the geocoder Python library.</p>
-<h3 id="2c.-Venues">2c. Venues<a class="anchor-link" href="#2c.-Venues">&#182;</a></h3><p>We will need to make API calls to extract information for venues.  The Foursquare [4] source will be used to request venues based on coordinates and radius.</p>
+<h3 id="2a.-School-Scores">2a. School Scores<a class="anchor-link" href="#2a.-School-Scores">&#182;</a></h3><p>I will be using a series of APIs and CSV files for this analysis.  The NJ Schools Scores from 2017-2018 will come from the NJ Department of Education <a href="#Footnotes">[2]</a>.  This dataset is well organized with various features including, county, district, score, percentile, amoung many others.</p>
+<h3 id="2b.-Coordinates">2b. Coordinates<a class="anchor-link" href="#2b.-Coordinates">&#182;</a></h3><p>We will need to make API calls to extract information for coordinates.  The ArcGIS <a href="#Footnotes">[3]</a> source will be used to request county and district coordinates using the geocoder Python library.</p>
+<h3 id="2c.-Venues">2c. Venues<a class="anchor-link" href="#2c.-Venues">&#182;</a></h3><p>We will need to make API calls to extract information for venues.  The Foursquare <a href="#Footnotes">[4]</a> source will be used to request venues based on coordinates and radius.</p>
 <h3 id="2d.-Data-Cleansing/Transforming">2d. Data Cleansing/Transforming<a class="anchor-link" href="#2d.-Data-Cleansing/Transforming">&#182;</a></h3><p>After the data is extracted, we will perform transform operations to do the following:</p>
 <ol>
 <li>Choose the columns we want to work with</li>
@@ -13190,6 +13198,14 @@ div#notebook {
 <li>Set indexes</li>
 </ol>
 <p>Once the calls are made to the API sources we will convert them to Pandas dataframes and save them to CSV files.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
 
 </div>
 </div>
@@ -13206,7 +13222,7 @@ div#notebook {
 <div class="text_cell_render border-box-sizing rendered_html">
 <!-- Represents the main component of the report where you discuss and describe any exploratory data analysis that you did, any inferential statistical testing that you performed, if any, and what machine learnings were used and why. -->
 
-<h3 id="3a.-Exploratory-Data-Analysis">3a. Exploratory Data Analysis<a class="anchor-link" href="#3a.-Exploratory-Data-Analysis">&#182;</a></h3><p>After the data was extract and processed, intial data analysis was conducted to get a better understanding of what the data looks like. I plan to group the individual school scores by district and use the mean as the average score for the district. There will be a similar analysis done to analyze counties to provide school density for each county.  There 485 districts, 21 counties, 371 unique venue categories.</p>
+<h3 id="3a.-Exploratory-Data-Analysis">3a. Exploratory Data Analysis<a class="anchor-link" href="#3a.-Exploratory-Data-Analysis">&#182;</a></h3><p>After the data was extract and processed, intial data analysis was conducted to get a better understanding of what the data looks like. I plan to group the individual school scores by district and use the mean as the average score for the district. There will be a similar analysis done to analyze counties to provide school density for each county.  There 491 unique districts, 21 counties, 373 unique venue categories.</p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/3a_district_df.png" alt="dataframe" width="400"/></p>
 <p>We also want to retrieve the 5 most common venues for for each district using the <code>return_most_common_venues</code> function.  With these venues in hand we can run statistical analysis and machine learning to cluster the venues.<br>
 <img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/3a_most_common.png" alt="most common venues" width="800"/></p>
@@ -13221,6 +13237,14 @@ div#notebook {
 <p>We can take a look at the distribution of the scores in bins of 10 values with a histogram.  The scores seem to be pretty evenly distributed from low scores to high scores.  Also, it was interesting to note that the majority of the school districts fall into the Medium category with 330.  The High and Low categories were very close in terms of distribution with 131 and 139 districts respectively.</p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/avg_score_hist.png" alt="histogram" width="600"/></p>
 <p>With the district scores categorized, I wanted to analyze each category to see if I could uncover any patterns about the types of venues that are most common to each.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
 
 </div>
 </div>
@@ -13253,13 +13277,21 @@ div#notebook {
 </li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/top20_venues_hbar.png" alt="top 20 venues" title="top 20 frequent venues"></p>
-<h3 id="4b.-County-Density-Map">4b. County Density Map<a class="anchor-link" href="#4b.-County-Density-Map">&#182;</a></h3><p>I wanted to see if density had any impact on school score so I grouped the data by county and returned the count of schools within each county.  The result was displayed over a Leaflet map using the folium [5] Python library to show the density of schools for each county.  We could see that Bergen and Morris counties were the most dense in terms of schools that belonged to each county.  Also, the results showed that the denser counties were more prevalent in the northern part of the state, closer to New York City.</p>
+<h3 id="4b.-County-Density-Map">4b. County Density Map<a class="anchor-link" href="#4b.-County-Density-Map">&#182;</a></h3><p>I wanted to see if density had any impact on school score so I grouped the data by county and returned the count of schools within each county.  The result was displayed over a Leaflet map using the folium <a href="#Footnotes">[5]</a> Python library to show the density of schools for each county.  We could see that Bergen and Morris counties were the most dense in terms of schools that belonged to each county.  Also, the results showed that the denser counties were more prevalent in the northern part of the state, closer to New York City.</p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4b_density_map1.png" alt="density map" width="600"/></p>
 <h3 id="4c.-Density-and-Score-Map">4c. Density and Score Map<a class="anchor-link" href="#4c.-Density-and-Score-Map">&#182;</a></h3><p>With an initial map created that displays the density of each county, I needed to see whether density had any relationship to the actual school scores for each district.  The results show that the highest scoring districts, Fair Haven, Englewood Cliffs, and Mendham are located in the northern part of the state and belong to the denser counties in the state.  We can also see from the map that the districts with the higher scores are located in the denser counties and also closer to the city.  This could mean higher property taxes, higher incomes, and access to higher education programs.  We can also see from the map that the districts with the lowest scores are primarily in areas that are away from major city centers.  An example of these districts would be Commercial, Downe, and Dennis townships which are all located in Cumberland County the least dense county in the analysis.</p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map1.png" alt="density score map1" width="600"/></p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map2.png" alt="density score map2" width="600"/></p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map3.png" alt="density score map3" width="600"/></p>
 <p><img src="https://raw.githubusercontent.com/KitRana/Coursera_Capstone/master/4c_density_score_map4.png" alt="density score map4" width="600"/></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
 
 </div>
 </div>
@@ -13290,6 +13322,14 @@ div#notebook {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="6.-Conclusion">6. Conclusion<a class="anchor-link" href="#6.-Conclusion">&#182;</a></h2>
 </div>
 </div>
@@ -13298,7 +13338,15 @@ div#notebook {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><!-- Conclude -->
-In conclusion, keeping the observations and future improvements of the analysis in mind, I believe that for people looking to either buy or rent property in New Jersey with intent to raise a family in a town with good schools should explore cities or towns in the central and northern parts of the state.  A few counties I would recommened are Morris and Bergen they have the highest average school scores and have a large volume of schools in the area for parents to choose.  I would recommend avoiding Cumberland County as it has one of the lowest average scores in the state.</p>
+In conclusion, keeping the observations and future improvements of the analysis in mind, I believe that for people looking to either buy or rent property in New Jersey with intent to raise a family in a town with good schools should explore cities or towns in the central and northern parts of the state.  A few counties I would recommened are Morris and Bergen they have the highest average school scores and have a large volume of schools in the area for parents to choose.  I would recommend avoiding Cumberland County as it has one of the lowest average scores in the state [Hello].</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
 
 </div>
 </div>
@@ -13313,7 +13361,19 @@ In conclusion, keeping the observations and future improvements of the analysis 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>[1]: <a href="https://www.census.gov/quickfacts/fact/table/NJ/PST045218">U.S. Census Bureau - New Jersey</a></p>
+<p>[1] <a href="https://www.census.gov/quickfacts/fact/table/NJ/PST045218">U.S. Census Bureau - New Jersey</a><br>
+[2] <a href="https://www.nj.com/education/2019/03/nj-just-graded-its-public-schools-from-0-100-heres-how-every-school-scored">NJ.com</a><br>
+[3] <a href="https://www.arcgis.com/index.html">ArcGIS</a><br>
+[4] <a href="https://foursquare.com/">Foursquare</a><br>
+[5] <a href="https://python-visualization.github.io/folium/">Folium</a></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><br></p>
 
 </div>
 </div>
